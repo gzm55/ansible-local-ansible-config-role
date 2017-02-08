@@ -1,0 +1,31 @@
+galaxy_info:
+  author: James Z.M. Gao
+  description: Load one or more config entries for current ansible instance.
+
+  license: BSD
+
+  # for supporting lookup('ini' '... default=xxx ...'), we need at least 2.2.1.0
+  min_ansible_version: 2.2.1.0
+
+  #
+  # Below are all platforms currently available. Just uncomment
+  # the ones that apply to your role. If you don't see your
+  # platform on this list, let us know and we'll get it added!
+  #
+  platforms:
+  - name: GenericBSD
+    versions:
+    - any
+  - name: GenericLinux
+    versions:
+    - any
+  - name: Windows
+    versions:
+    - any
+  - name: GenericUNIX
+    versions:
+    - any
+
+  galaxy_tags: [system]
+
+dependencies: []

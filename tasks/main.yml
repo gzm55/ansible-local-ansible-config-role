@@ -1,0 +1,54 @@
+---
+- name: detect local ansible config sections
+  run_once: True
+  when: local_ansible_config is not defined
+  set_fact:
+    local_ansible_config:
+      config_file: |-
+        {{ [ lookup('env', 'ANSIBLE_CONFIG'),
+             'ansible.cfg',
+             '~/.ansible.cfg' | expanduser,
+             '/etc/ansible/ansible.cfg' ]
+           | select('exists')
+           | first
+           | d()
+        }}
+      sections: "{{ lookup('file', [ lookup('env', 'ANSIBLE_CONFIG'),
+                                     'ansible.cfg',
+                                     '~/.ansible.cfg' | expanduser,
+                                     '/etc/ansible/ansible.cfg',
+                                     role_path + '/files/empty.ini' ]
+                                   | select('exists')
+                                   | first
+                    ).split('\n')
+                    | select('match', '\\[[^]]+\\].*')
+                    | map('regex_replace', '^.*\\[|\\].*$', '')
+                    | difference(['']) }}"
+
+- name: load local ansible config key
+  run_once: True
+  with_flattened: >
+    {{ lookup('flattened', [ config_key ], wantlist=True)
+       | select('string')
+       | difference(['', omit]) }}
+  vars:
+    section: "{{ item.split('.')[0] }}"
+    key:     "{{ item.split('.')[1] }}"
+  when:
+  - local_ansible_config.config_file != ''
+  - local_ansible_config.sections | intersect([section]) | list | length > 0
+  - local_ansible_config[section][key] is not defined
+  - local_ansible_config[section][';unset.'+key] is not defined
+  set_fact:
+    local_ansible_config: >
+      {{  local_ansible_config
+          | combine(
+              { section:
+                [{ key: lookup('ini', key+' section='+section+' file='+(local_ansible_config.config_file|quote)+' default='+omit) }]
+                | rejectattr(key, 'match', omit)
+                | first
+                | d({ ';unset.'+key: True})
+              },
+              recursive=True
+            )
+      }}
