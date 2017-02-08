@@ -21,7 +21,7 @@ galaxy_info:
     - any
   - name: Windows
     versions:
-    - any
+    - all
   - name: GenericUNIX
     versions:
     - any
