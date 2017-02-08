@@ -8,10 +8,8 @@ The output variable is like:
 ```
 local_ansible_config: {
     "config_file": "/etc/ansible/ansible.cfg",
-    "defaults": {
-        "roles_path": "../",
-        ";unset.xxx": true
-    },
+    "defaults/roles_path": "../",
+    ";unset/defaults/xxx": true,
     "sections": [
         "defaults",
         "privilege_escalation",
@@ -35,7 +33,7 @@ Role Variables
 
 `config_key` (optionl) could be:
 - unset (default), for dependencies
-- a string of a config key in the form of "section.key"
+- a string of a config key in the form of "section/key"
 - a list of strings of config keys
 
 Dependencies
@@ -52,10 +50,10 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
       - role: ansible-local-ansible-config-role
       - role: ansible-local-ansible-config-role
-        config_key: [ a.bc, defaults.roles_path ]
+        config_key: [ a/bc, defaults/roles_path ]
       - role: ansible-local-ansible-config-role
-        config_key: [ defaults.roles_path, defaults.xxx ]
-        config_key: defaults.xxx
+        config_key: [ defaults/roles_path, defaults/xxx ]
+        config_key: defaults/xxx
 
 
 License

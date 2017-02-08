@@ -32,23 +32,20 @@
        | select('string')
        | difference(['', omit]) }}
   vars:
-    section: "{{ item.split('.')[0] }}"
-    key:     "{{ item.split('.')[1] }}"
+    section: "{{ item.split('/')[0] }}"
+    key:     "{{ item.split('/')[1] }}"
   when:
   - local_ansible_config.config_file != ''
   - local_ansible_config.sections | intersect([section]) | list | length > 0
-  - local_ansible_config[section][key] is not defined
-  - local_ansible_config[section][';unset.'+key] is not defined
+  - local_ansible_config[item] is not defined
+  - local_ansible_config[';unset/'+item] is not defined
   set_fact:
     local_ansible_config: >
       {{  local_ansible_config
           | combine(
-              { section:
-                [{ key: lookup('ini', key+' section='+section+' file='+(local_ansible_config.config_file|quote)+' default='+omit) }]
-                | rejectattr(key, 'match', omit)
-                | first
-                | d({ ';unset.'+key: True})
-              },
-              recursive=True
+              [{ item: lookup('ini', key+' section='+section+' file='+(local_ansible_config.config_file|quote)+' default='+omit) }]
+              | rejectattr(item, 'match', omit)
+              | first
+              | d({ ';unset/'+item: True})
             )
       }}

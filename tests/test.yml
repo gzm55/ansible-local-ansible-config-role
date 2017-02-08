@@ -4,10 +4,10 @@
   roles:
   - role: ansible-local-ansible-config-role
   - role: ansible-local-ansible-config-role
-    config_key: [ a.bc, defaults.roles_path ]
+    config_key: [ a/bc, defaults/roles_path ]
   - role: ansible-local-ansible-config-role
-    config_key: [ defaults.roles_path, defaults.xxx ]
-    config_key: defaults.xxx
+    config_key: [ defaults/roles_path, defaults/xxx ]
+    config_key: defaults/xxx
   tasks:
   - debug: msg="{{local_ansible_config}}"
     run_once: True
