@@ -1,4 +1,13 @@
 ---
+# in some versions, lookup('ini' '... default=xxx ...') has bugs.
+- name: lookup ini plugin is ok
+  run_once: True
+  when: inventory_hostname == ansible_play_hosts[0]
+  assert:
+    that: "lookup('ini',
+                  'fake-key section=check-default file=' + ((role_path + '/files/check-plugin.ini') | quote) + ' default=' + omit)
+           == omit"
+
 - name: detect local ansible config sections
   run_once: True
   when: local_ansible_config is not defined
