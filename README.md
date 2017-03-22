@@ -25,7 +25,7 @@ local_ansible_config: {
 Requirements
 ------------
 
-Ansible >= 2.2.1.0
+Ansible >= 2.0
 jinja >= 2.7
 
 Role Variables
