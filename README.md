@@ -1,6 +1,8 @@
 local_ansible_config
 =========
 
+This role is __DEPRECATED__ from ansible 2.5+. See `config` lookup plugin (https://docs.ansible.com/ansible/latest/plugins/lookup/config.html).
+
 Load one or more config entries for current ansible instance.
 
 The output variable is like:
